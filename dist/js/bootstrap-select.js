@@ -1,7 +1,7 @@
 /*!
  * Bootstrap-select v1.13.18 (https://developer.snapappointments.com/bootstrap-select)
  *
- * Copyright 2012-2020 SnapAppointments, LLC
+ * Copyright 2012-2021 SnapAppointments, LLC
  * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
  */
 
@@ -1460,6 +1460,7 @@
             titleNotAppended = !this.selectpicker.view.titleOption.parentNode,
             selectedIndex = element.selectedIndex,
             selectedOption = element.options[selectedIndex],
+            firstSelectable = element.querySelector('select > *:not(:disabled)').index,
             navigation = window.performance && window.performance.getEntriesByType('navigation'),
             // Safari doesn't support getEntriesByType('navigation') - fall back to performance.navigation
             isNotBackForward = (navigation && navigation.length) ? navigation[0].type !== 'back_forward' : window.performance.navigation.type !== 2;
@@ -1472,7 +1473,7 @@
           // Check if selected or data-selected attribute is already set on an option. If not, select the titleOption option.
           // the selected item may have been changed by user or programmatically before the bootstrap select plugin runs,
           // if so, the select will have the data-selected attribute
-          selectTitleOption = !selectedOption || (selectedIndex === 0 && selectedOption.defaultSelected === false && this.$element.data('selected') === undefined);
+          selectTitleOption = !selectedOption || (selectedIndex === firstSelectable && selectedOption.defaultSelected === false && this.$element.data('selected') === undefined);
         }
 
         if (titleNotAppended || this.selectpicker.view.titleOption.index !== 0) {
@@ -2908,9 +2909,13 @@
             liActiveIndex = that.selectpicker.current.elements.length - 1;
           } else {
             activeLi = that.selectpicker.current.data[liActiveIndex];
-            offset = activeLi.position - activeLi.height;
 
-            updateScroll = offset < scrollTop;
+            // could be undefined if no results exist
+            if (activeLi) {
+              offset = activeLi.position - activeLi.height;
+
+              updateScroll = offset < scrollTop;
+            }
           }
         } else if (e.which === keyCodes.ARROW_DOWN || downOnTab) { // down
           // scroll to top and highlight first option
@@ -2920,15 +2925,19 @@
             liActiveIndex = that.selectpicker.view.firstHighlightIndex;
           } else {
             activeLi = that.selectpicker.current.data[liActiveIndex];
-            offset = activeLi.position - that.sizeInfo.menuInnerHeight;
 
-            updateScroll = offset > scrollTop;
+            // could be undefined if no results exist
+            if (activeLi) {
+              offset = activeLi.position - that.sizeInfo.menuInnerHeight;
+
+              updateScroll = offset > scrollTop;
+            }
           }
         }
 
         liActive = that.selectpicker.current.elements[liActiveIndex];
 
-        that.activeIndex = that.selectpicker.current.data[liActiveIndex].index;
+        that.activeIndex = (that.selectpicker.current.data[liActiveIndex] || {}).index;
 
         that.focusItem(liActive);
 

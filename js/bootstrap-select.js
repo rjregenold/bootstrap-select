@@ -1400,7 +1400,7 @@
         liData = liData || this.selectpicker.main.data[this.activeIndex];
         var a = li.firstChild;
 
-        if (a) {
+        if (liData && a) {
           a.setAttribute('aria-setsize', this.selectpicker.view.size);
           a.setAttribute('aria-posinset', liData.posinset);
 

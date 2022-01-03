@@ -1,7 +1,7 @@
 /*!
  * Bootstrap-select v1.13.18 (https://developer.snapappointments.com/bootstrap-select)
  *
- * Copyright 2012-2021 SnapAppointments, LLC
+ * Copyright 2012-2022 SnapAppointments, LLC
  * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
  */
 
@@ -1424,7 +1424,7 @@
         liData = liData || this.selectpicker.main.data[this.activeIndex];
         var a = li.firstChild;
 
-        if (a) {
+        if (liData && a) {
           a.setAttribute('aria-setsize', this.selectpicker.view.size);
           a.setAttribute('aria-posinset', liData.posinset);
 
